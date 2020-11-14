@@ -1,4 +1,4 @@
-FROM sagemath/sagemath:latest
+FROM sagemath/sagemath-dev:latest
 LABEL author="Duc A. Hoang"
 
 RUN sudo apt-get -qq update && \
