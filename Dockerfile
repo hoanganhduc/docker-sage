@@ -10,6 +10,7 @@ RUN sudo apt-get -qq update && \
 		texlive-latex-recommended \
 		texlive-latex-extra \
 		texlive-fonts-recommended \
+		texlive-lang-other \
 		latexmk && \
 	sudo apt-get -qq clean && \
     sudo rm -r /var/lib/apt/lists/*
