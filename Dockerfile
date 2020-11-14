@@ -11,6 +11,7 @@ RUN sudo apt-get -qq update && \
 		texlive-latex-extra \
 		texlive-fonts-recommended \
 		texlive-lang-other \
-		latexmk && \
+		latexmk \
+		secure-delete && \
 	sudo apt-get -qq clean && \
     sudo rm -r /var/lib/apt/lists/*
