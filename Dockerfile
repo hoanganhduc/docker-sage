@@ -3,7 +3,7 @@ LABEL author="Duc A. Hoang"
 
 RUN sudo apt-get -qq update
 	
-RUN sudo apt-get -qq install -y texlive-latex-base
+RUN sudo apt-get -qq install -y texlive-latex-base texlive-latex-recommended
 
 RUN sudo apt-get -qq install -y latexmk
 	
