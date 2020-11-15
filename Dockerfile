@@ -32,14 +32,27 @@ RUN pacman -Syy && \
 USER $USERNAME
 WORKDIR $USERHOME
 	
-RUN git clone -c core.symlinks=true --branch master git://trac.sagemath.org/sage.git && \
-	cd sage && \
-	make configure && \
+#RUN git clone -c core.symlinks=true --branch master git://trac.sagemath.org/sage.git && \
+#	cd sage && \
+#	make configure && \
+#	./configure && \
+#	make && \
+#	./config.status --recheck && ./config.status && \
+#	sudo ln -s /home/sage/sage /usr/local/bin/sage && \
+#	mkdir $HOME/.sage && echo "%colors linux" >> $HOME/.sage/init.sage 
+
+RUN curl -O http://mirrors.mit.edu/sage/src/sage-9.2.tar.gz && \
+	tar xvf sage-9.2.tar.gz && \
+	mv sage-9.2 sage && \
+	rm -rf sage-9.2.tar.gz
+	
+RUN cd $USERHOME/sage && \
 	./configure && \
 	make && \
 	./config.status --recheck && ./config.status && \
-	sudo ln -s /home/sage/sage /usr/bin/sage && \
-	mkdir $HOME/.sage && echo "%colors linux" >> $HOME/.sage/init.sage 
+	sudo ln -s $USERHOME/sage/sage /usr/local/bin/sage && \
+	mkdir $USERHOME/.sage && echo "%colors linux" >> $USERHOME/.sage/init.sage 
+	
 
 	
 
