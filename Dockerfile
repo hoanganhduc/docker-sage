@@ -31,8 +31,8 @@ RUN pacman -Syy && \
 	yes | pacman -Scc
 
 FROM required-tools as make-packages
+
 USER $USERNAME
-WORKDIR $USERHOME
 	
 #RUN git clone -c core.symlinks=true --branch master git://trac.sagemath.org/sage.git && \
 #	cd sage && \
