@@ -30,16 +30,13 @@ RUN pacman -Syy && \
 	pacman -S --noconfirm --needed base base-devel python perl ffmpeg imagemagick texlive-core texlive-bin texlive-fontsextra openssh git curl wget sudo && \
 	yes | pacman -Scc
 
-FROM required-tools as clone-sources
+FROM required-tools
 USER $USERNAME
-WORKDIR $USERHOME
 	
-RUN git clone -c core.symlinks=true --branch master git://trac.sagemath.org/sage.git
+RUN cd $USERHOME && git clone -c core.symlinks=true --branch master git://trac.sagemath.org/sage.git
 
-FROM clone-sources as final-build
-WORKDIR $USERHOME/sage
-
-RUN	make configure && \
+RUN	$USERHOME/sage && \
+	make configure && \
 	./configure && \
 	make build && \
 	./config.status --recheck && ./config.status && \
