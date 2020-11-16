@@ -1,4 +1,4 @@
-FROM archlinux:latest as base-system
+FROM archlinux:latest
 LABEL author="Duc A. Hoang"
 
 ARG USERNAME=sage
@@ -34,7 +34,7 @@ WORKDIR $USERHOME
 	
 RUN git clone -c core.symlinks=true --branch master git://trac.sagemath.org/sage.git
 
-RUN	sage && \
+RUN	cd sage && \
 	make configure && \
 	./configure && \
 	make build && \
