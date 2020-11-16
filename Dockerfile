@@ -23,27 +23,21 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8 
 
-FROM base-system as required-tools
 RUN pacman -Syy && \
 	pacman -S --noconfirm --needed arb bc binutils boost brial cblas cddlib eclib fflas-ffpack flintqs gc gcc gcc gcc-fortran gd gf2x gfan giac glpk gsl iml lapack lcalc libatomic_ops libbraiding libgiac lrcalc m4 m4ri m4rie make nauty openblas palp pari pari-elldata pari-galdata pari-galdata pari-galpol pari-seadata pari-seadata patch perl planarity ppl python r rankwidth readline sqlite3 suitesparse symmetrica sympow tachyon tar which zn_poly && \
 	pacman -S --noconfirm --needed boost coin-or-cbc coxeter ninja openssl pandoc pari-elldata pari-galpol pari-seadata perl-term-readline-gnu && \
 	pacman -S --noconfirm --needed base base-devel python perl ffmpeg imagemagick texlive-core texlive-bin texlive-fontsextra openssh git curl wget sudo && \
 	yes | pacman -Scc
 
-FROM required-tools
 USER $USERNAME
+WORKDIR $USERHOME
 	
-RUN cd $USERHOME && git clone -c core.symlinks=true --branch master git://trac.sagemath.org/sage.git
+RUN git clone -c core.symlinks=true --branch master git://trac.sagemath.org/sage.git
 
-RUN	$USERHOME/sage && \
+RUN	sage && \
 	make configure && \
 	./configure && \
 	make build && \
 	./config.status --recheck && ./config.status && \
 	sudo ln -s /home/sage/sage /usr/local/bin/sage && \
 	mkdir $HOME/.sage && echo "%colors linux" >> $HOME/.sage/init.sage
-	
-
-	
-
-
