@@ -1,4 +1,4 @@
-FROM archlinux:latest
+FROM archlinux:latest as base-system
 LABEL author="Duc A. Hoang"
 
 ARG USERNAME=sage
@@ -23,12 +23,14 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8 
 
+FROM base-system as required-tools
 RUN pacman -Syy && \
 	pacman -S --noconfirm --needed arb bc binutils boost brial cblas cddlib eclib fflas-ffpack flintqs gc gcc gcc gcc-fortran gd gf2x gfan giac glpk gsl iml lapack lcalc libatomic_ops libbraiding libgiac lrcalc m4 m4ri m4rie make nauty openblas palp pari pari-elldata pari-galdata pari-galdata pari-galpol pari-seadata pari-seadata patch perl planarity ppl python r rankwidth readline sqlite3 suitesparse symmetrica sympow tachyon tar which zn_poly && \
-#	pacman -S --noconfirm --needed boost coin-or-cbc coxeter ninja openssl pandoc pari-elldata pari-galpol pari-seadata perl-term-readline-gnu && \
+	pacman -S --noconfirm --needed boost coin-or-cbc coxeter ninja openssl pandoc pari-elldata pari-galpol pari-seadata perl-term-readline-gnu && \
 	pacman -S --noconfirm --needed base base-devel python perl ffmpeg imagemagick texlive-core texlive-bin texlive-fontsextra openssh git curl wget sudo && \
 	yes | pacman -Scc
 
+FROM required-tools as make-packages
 USER $USERNAME
 WORKDIR $USERHOME
 	
@@ -48,7 +50,7 @@ RUN curl -O http://mirrors.mit.edu/sage/src/sage-9.2.tar.gz && \
 	
 RUN cd $USERHOME/sage && \
 	./configure && \
-	make && \
+	make build && \
 	./config.status --recheck && ./config.status && \
 	sudo ln -s $USERHOME/sage/sage /usr/local/bin/sage && \
 	mkdir $USERHOME/.sage && echo "%colors linux" >> $USERHOME/.sage/init.sage 
